@@ -6,7 +6,7 @@ NuGet Package: https://www.nuget.org/packages/TagBites.Net/
 
 ## Chat example
 
-### Client code.
+### Client code
 ```csharp
 var client = new Client("127.0.0.1", 82);
 client.Received += (s, e) => Console.WriteLine(e.Message.ToString());
@@ -16,24 +16,24 @@ while (true)
     await client.SendAsync(Console.ReadLine());
 ```
 
-### Server code.
+### Server code
 ```csharp
 var server = new Server("127.0.0.1", 82);
 server.Received += (s, e) => server.SendToAllAsync($"{e.Client}: {e.Message}", e.Client);
 server.ClientConnected += (s, e) => server.SendToAllAsync($"{e.Client} connected", e.Client);
 server.ClientDisconnected += (s, e) => server.SendToAllAsync($"{e.Client} disconnected", e.Client);
-server.Listening = true; // starts new thread
+server.Listening = true; // starts a new thread
 
 Console.ReadLine(); // for console application to prevent app from closing
 ```
 
-In this example a `string` type is used for communication, but any serializable objects can be send/received. By default `System.Runtime.Serialization.Formatters.Binary.BinaryFormatter` is used for serialization, but it can be replaced with custom implementation.
+In this example a `string` type is used for communication, but any serializable objects can be send/received. By default `System.Runtime.Serialization.Formatters.Binary.BinaryFormatter` is used for serialization, but it can be replaced with a custom implementation.
 
 Full example on github: [TagBites.Net-Sample-Chat](https://github.com/TagBites/TagBites.Net-Sample-Chat).
 
 ## Chat example using RMI (Remote Method Invocation)
     
-### Client code.
+### Client code
 ```csharp
 var client = new Client("127.0.0.1", 82);
 client.Use<IChatClient, ChatClient>();
@@ -46,11 +46,11 @@ while (true)
 }
 ```
 
-Method `Use<TControllerInterface, TController>()` registers controller that can be used by server. Server site can use `IChatClient` interface to execute methods implemented by `ChatClient` on client site. Client/Server can registers many controllers. Controller instance will be created on first usage.
+The method `Use<TControllerInterface, TController>()` registers a controller that can be used by the server. The server site can use the `IChatClient` interface to execute methods implemented by `ChatClient` on the client's site. The client/server can registers many controllers. The controller instance will be created on first use.
 
-`GetController<T>()` returns proxy interface to class register on remote site. Calling method on this instance will invoke method on remote site. Controller can invoke methods with primitive or serializable parameters types and returns void/Task or any primitive or serializable type.
+`GetController<T>()` returns the proxy interface to the class register in the remote site. The calling method in this instance will invoke method in the remote site. The Controller can invoke methods with primitive or serializable parameter types and returns void/Task or any primitive or serializable type.
 
-### Server code.
+### Server code
 ```csharp
 var server = new Server("127.0.0.1", 82);
 server.Use<IChatServer, ChatServer>(client => new ChatServer(client, server));
@@ -77,7 +77,7 @@ server.Listening = true;
 Console.ReadLine();
 ```
 
-### Classes.
+### Classes
 ```csharp
 public interface IChatClient
 {
