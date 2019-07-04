@@ -1,3 +1,5 @@
+# Release Notes
+
 ## 1.0.0-beta3
 - fix: no message result for exception in RMI
 
