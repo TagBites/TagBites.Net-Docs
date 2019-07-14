@@ -53,22 +53,18 @@ The method `Use<TControllerInterface, TController>()` registers a controller tha
 ### Server code
 ```csharp
 var server = new Server("127.0.0.1", 82);
-server.Use<IChatServer, ChatServer>(client => new ChatServer(client, server));
+server.Use<IChatServer, ChatServer>(client => new ChatServer() { Client = client, Server = server });
 server.ClientConnected += (s, e) =>
 {
-    var controller = client.GetController<IChatClient>();
-
     foreach (var client in server.GetClients())
-        controller.MessageReceive(null, $"Client {e.Client} connected.");
+        client.GetController<IChatClient>().MessageReceive(null, $"Client {e.Client} connected.");
 
     Console.WriteLine($"Client {e.Client.Identity} connected.");
 };
 server.ClientDisconnected += (s, e) =>
 {
-    var controller = client.GetController<IChatClient>();
-
     foreach (var client in server.GetClients())
-        controller.MessageReceive(null, $"Client {e.Client} disconnected.");
+        client.GetController<IChatClient>().MessageReceive(null, $"Client {e.Client} disconnected.");
 
     Console.WriteLine($"Client {e.Client} disconnected.");
 };
@@ -83,12 +79,32 @@ public interface IChatClient
 {
     void MessageReceive(string userName, string message);
 }
+public class ChatClient : IChatClient 
+{
+    public void MessageReceive(string userName, string message)
+    {
+        Console.WriteLine($"{userName ?? "Server"}: {message}");
+    }
+}
+
 public interface IChatServer
 {
     void Send(string message);
 }
-public class ChatClient : IChatClient { ... }
-public class ChatServer : IChatServer { ... }
+public class ChatServer : IChatServer 
+{
+    public Server Server { get; set; }
+    public ServerClient Client { get; set; }
+
+    public void Send(string message)
+    {
+        Console.WriteLine($"{Client.Identity}: {message}");
+
+        foreach (var client in Server.GetClients())
+            if (Client != client)
+                client.GetController<IChatClient>().MessageReceive(Client.Identity?.ToString(), message);
+    }
+}
 ```
 
 Full example on github: [TagBites.Net-Sample-ChatWithControllers](https://github.com/TagBites/TagBites.Net-Sample-ChatWithControllers).
