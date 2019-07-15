@@ -1,8 +1,8 @@
 # Network Configuration
 
-[NetworkConfig](xref:TagBites.Net.NetworkConfig) class allows to define basic network configuration like encoding or serializer. 
+`NetworkConfig` class allows to define basic network configuration like encoding or serializer. 
 
-[Server](xref:TagBites.Net.Server) or [Client](xref:TagBites.Net.Client) instance can be created with custom configuration by passing [NetworkConfig](xref:TagBites.Net.NetworkConfig) instance to their constructor.
+`Server` or `Client` instance can be created with custom configuration by passing `NetworkConfig` instance to their constructor.
 
 To change default network configuration:
 
