@@ -27,7 +27,9 @@ server.Listening = true; // starts a new thread
 Console.ReadLine(); // for console application to prevent app from closing
 ```
 
-In this example a `string` type is used for communication, but any serializable objects can be send/received. By default `System.Runtime.Serialization.Formatters.Binary.BinaryFormatter` is used for serialization, but it can be replaced with a custom implementation.
+In this example a `string` type is used for communication, but any serializable objects can be send/received. 
+
+By default `System.Runtime.Serialization.Formatters.Binary.BinaryFormatter` is used for serialization, but it can be replaced with a [custom implementation](configuration.md). 
 
 Full example on github: [TagBites.Net-Sample-Chat](https://github.com/TagBites/TagBites.Net-Sample-Chat).
 
