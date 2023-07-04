@@ -16,14 +16,8 @@ By default all text messages are encoded using `UTF8`.
 
 ## Serializer
 
-By default `System.Runtime.Serialization.Formatters.Binary.BinaryFormatter` is used for serialization.
+By default [Json.NET](https://www.newtonsoft.com/json) is used for serialization, with following implementation:
 
-To use [Json.NET](https://www.newtonsoft.com/json) by default:
-```csharp
-NetworkConfig.Default = new NetworkConfig(new NewtonsoftJsonSerializer());
-```
-
-Example implementation of `NewtonsoftJsonSerializer` class:
 ```csharp
 public class NewtonsoftJsonSerializer : INetworkSerializer
 {
