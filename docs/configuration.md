@@ -1,6 +1,6 @@
 # Network Configuration
 
-`NetworkConfig` class allows to define basic network configuration like encoding or serializer. 
+`NetworkConfig` class allows to define basic network configuration like encoding or serializer. Both `Encoding` and `Serializer` are **read-only** properties — they can only be set via a constructor, not through an object initializer.
 
 `Server` or `Client` instance can be created with custom configuration by passing `NetworkConfig` instance to their constructor.
 
@@ -9,6 +9,19 @@ To change default network configuration:
 ```csharp
 NetworkConfig.Default = new NetworkConfig(...);
 ```
+
+## Constructors
+
+| Constructor | Notes |
+|---|---|
+| `NetworkConfig()` | `Encoding = UTF8`, `Serializer = ` built-in Json.NET serializer. |
+| `NetworkConfig(Encoding encoding)` | Custom encoding, default serializer. |
+| `NetworkConfig(INetworkSerializer serializer)` | Default encoding (`UTF8`), custom serializer. |
+| `NetworkConfig(Encoding encoding, INetworkSerializer serializer)` | Custom encoding and serializer. |
+| `NetworkConfig(Action<Stream, object> serializeDelegate, Func<Stream, Type, object> deserializeDelegate)` | Default encoding, serializer defined inline as delegates (no need to implement `INetworkSerializer`). |
+| `NetworkConfig(Encoding encoding, Action<Stream, object> serializeDelegate, Func<Stream, Type, object> deserializeDelegate)` | Custom encoding, serializer defined inline as delegates. |
+
+All arguments are validated as non-null (constructors throw `ArgumentNullException` otherwise).
 
 ## Encoding
 
